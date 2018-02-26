@@ -1,5 +1,4 @@
 import React from 'react'
-import blogService from '../services/blogs'
 
 class Blog extends React.Component {
   constructor({props}) {
@@ -8,7 +7,8 @@ class Blog extends React.Component {
       visible: false,
     }
   }
-
+  
+/*
   like = (event) => {
   event.preventDefault()
   const blog = this.props.children
@@ -23,7 +23,7 @@ class Blog extends React.Component {
   })
 }
 
- delete = (event) => {
+  delete = (event) => {
   event.preventDefault()
   const blog = this.props.children
 
@@ -34,6 +34,7 @@ class Blog extends React.Component {
           visible: false 
         })
   }
+*/
 
   toggleVisibility = () => {
     this.setState({ visible: !this.state.visible })
@@ -52,11 +53,15 @@ class Blog extends React.Component {
       marginBottom: 5
     }
 
-   const userId = `bearer ${blog.user._id}`
-   //if(userId === props.loggedIn.token) {
-    // console.log("JOOOO!")
-  // }
-   console.log(props.loggedin.name)
+const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
+    const loggedin = JSON.parse(loggedUserJSON)
+    let del = <p></p>
+    if(blog.user === undefined || blog.user.username === undefined ||
+    loggedin.username.toString() === blog.user.username.toString()) {
+      del = <button onClick={this.props.delete(blog)}>delete</button>
+    } 
+
+    
   return (
 
   <div style={blogStyle}>
@@ -69,9 +74,11 @@ class Blog extends React.Component {
           <div onClick={this.toggleVisibility}>   
             <p> {blog.title} {blog.author} </p>
             <p> {blog.url} </p>
-            <p> {blog.likes} likes <button onClick={this.like}>like</button></p>
+            </div><div>
+            <p> {blog.likes} likes <button onClick={this.props.like(blog)}>like</button></p>
+            </div><div onClick={this.toggleVisibility}>   
             <p> added by {blog.user.name}</p>
-            <button onClick={this.delete}>delete</button>
+            {del}
           </div>
         </div>
       </div>

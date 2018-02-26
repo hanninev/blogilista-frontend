@@ -42,6 +42,36 @@ class App extends React.Component {
     window.localStorage.removeItem('loggedBlogUser')
     this.setState({ user: null, message: "Olet kirjautunut ulos!" })
   }
+  
+  delete = (blog) => () => {
+  if (window.confirm("Haluatko varmasti poistaa blogin " + blog.title + "?")) { 
+      blogService
+      .remove(blog.id)
+  
+        this.setState({
+          blogs: this.state.blogs.filter(function(a) {
+            return a !== blog
+          })
+      })
+  }
+  }
+
+  like = (blog) => () => {
+  blog.likes++
+
+   blogService
+      .update(blog.id, blog)
+      .then(updatedBlog => {
+        this.setState({
+          blogs: this.state.blogs.filter(function(a) {
+            return a !== blog
+          })
+        })
+        this.setState({
+          blogs: this.state.blogs.concat(updatedBlog) 
+        })
+  })
+}
 
   addBlog = (event) => {
     event.preventDefault()
@@ -131,7 +161,7 @@ class App extends React.Component {
         <div>
         <h2>Blogs</h2>
         {this.state.blogs.map(blog => 
-           <Blog key={blog._id} loggedin={this.state.user} ref={component => this.blog = component}>
+           <Blog key={blog._id} delete={this.delete} like={this.like}>
           {blog}
           </Blog>
         )}
