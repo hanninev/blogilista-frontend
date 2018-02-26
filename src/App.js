@@ -4,6 +4,7 @@ import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Blog from './components/Blog'
+import SimpleBlog from './components/SimpleBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
@@ -161,9 +162,10 @@ class App extends React.Component {
         <div>
         <h2>Blogs</h2>
         {this.state.blogs.map(blog => 
-           <Blog key={blog._id} delete={this.delete} like={this.like}>
+         //  <Blog key={blog._id} delete={this.delete} like={this.like}>
+         <SimpleBlog key={blog._id} blog={blog} onClick={this.like}>
           {blog}
-          </Blog>
+          </SimpleBlog>
         )}
         </div>
     )}
