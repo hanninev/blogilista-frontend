@@ -1,47 +1,23 @@
 import React from 'react'
+import blogService from '../services/blogs'
 
 class Blog extends React.Component {
-  constructor({props}) {
+  constructor({ props }) {
     super(props)
     this.state = {
       visible: false,
     }
   }
-  
-/*
-  like = (event) => {
-  event.preventDefault()
-  const blog = this.props.children
-  blog.likes++
-
-   blogService
-      .update(blog.id, blog)
-      .then(updatedBlog => {
-        this.setState({
-          visible: true 
-        })
-  })
-}
-
-  delete = (event) => {
-  event.preventDefault()
-  const blog = this.props.children
-
-   blogService
-      .remove(blog.id)
-      
-      this.setState({
-          visible: false 
-        })
-  }
-*/
 
   toggleVisibility = () => {
     this.setState({ visible: !this.state.visible })
   }
 
   render() {
-    const blog = this.props.children
+    const blog = this.props.blog
+    const like = this.props.like
+    const remove = this.props.remove
+
     const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
     const showWhenVisible = { display: this.state.visible ? '' : 'none' }
  
@@ -53,29 +29,29 @@ class Blog extends React.Component {
       marginBottom: 5
     }
 
-const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
-    const loggedin = JSON.parse(loggedUserJSON)
     let del = <p></p>
-    if(blog.user === undefined || blog.user.username === undefined ||
-    loggedin.username.toString() === blog.user.username.toString()) {
-      del = <button onClick={this.props.delete(blog)}>delete</button>
+    if (window.localStorage !== undefined) {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
+    const loggedin = JSON.parse(loggedUserJSON)
+    if(loggedin.username.toString() === blog.user.username.toString()) {
+      del = <button onClick={remove(blog)}>delete</button>
     } 
-
+  }
     
   return (
 
   <div style={blogStyle}>
         <div style={hideWhenVisible}>
-          <div onClick={this.toggleVisibility}>
+          <div onClick={this.toggleVisibility} className="blogHidden">
           {blog.title}: {blog.author}
           </div>
         </div>
-        <div style={showWhenVisible}>         
-          <div onClick={this.toggleVisibility}>   
+        <div style={showWhenVisible} onClick={this.toggleVisibility} className="blogShown">         
+          <div>   
             <p> {blog.title} {blog.author} </p>
             <p> {blog.url} </p>
             </div><div>
-            <p> {blog.likes} likes <button onClick={this.props.like(blog)}>like</button></p>
+            <p> {blog.likes} likes <button onClick={like(blog)}>like</button></p>
             </div><div onClick={this.toggleVisibility}>   
             <p> added by {blog.user.name}</p>
             {del}

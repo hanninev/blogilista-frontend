@@ -44,37 +44,27 @@ class App extends React.Component {
     this.setState({ user: null, message: "Olet kirjautunut ulos!" })
   }
   
-  delete = (blog) => () => {
+  delete = (blog) => async () => {
   if (window.confirm("Haluatko varmasti poistaa blogin " + blog.title + "?")) { 
-      blogService
-      .remove(blog.id)
-  
-        this.setState({
-          blogs: this.state.blogs.filter(function(a) {
-            return a !== blog
-          })
+      await blogService.remove(blog.id)
+      this.setState({
+        blogs: this.state.blogs.filter(function(a) {
+        return a !== blog
       })
+    })
   }
   }
 
-  like = (blog) => () => {
-  blog.likes++
+  like = (blog) => async () => {
+    blog['likes']++
 
-   blogService
-      .update(blog.id, blog)
-      .then(updatedBlog => {
-        this.setState({
-          blogs: this.state.blogs.filter(function(a) {
-            return a !== blog
-          })
-        })
-        this.setState({
-          blogs: this.state.blogs.concat(updatedBlog) 
-        })
-  })
-}
+     await blogService.update(blog.id, blog)
+     const blogs = await blogService.getAll()
+     this.setState({ blogs })
+ 
+  }
 
-  addBlog = (event) => {
+  addBlog = async (event) => {
     event.preventDefault()
     this.blogForm.toggleVisibility()
     const blogObject = {
@@ -83,16 +73,14 @@ class App extends React.Component {
       url: this.state.url
     }
 
-    blogService
-      .create(blogObject)
-      .then(newBlog => {
+    await blogService.create(blogObject)
+    const blogs = await blogService.getAll()
         this.setState({
-          blogs: this.state.blogs.concat(newBlog),
+          blogs,
           title: '',
           author: '',
           url: '',
           message: "Blogin lisääminen onnistui!"
-        })
         })
   }
 
@@ -162,10 +150,7 @@ class App extends React.Component {
         <div>
         <h2>Blogs</h2>
         {this.state.blogs.map(blog => 
-         //  <Blog key={blog._id} delete={this.delete} like={this.like}>
-         <SimpleBlog key={blog._id} blog={blog} onClick={this.like}>
-          {blog}
-          </SimpleBlog>
+        <Blog key={blog._id} blog={blog} remove={this.delete} like={this.like} />
         )}
         </div>
     )}
