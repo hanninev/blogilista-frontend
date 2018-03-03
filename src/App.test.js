@@ -21,16 +21,15 @@ import blogService from './services/blogs'
       })
     })
     
-  // Tehtävä 16
- /*   describe('when user is logged', () => {
+    describe('when user is logged', () => {
       beforeEach(() => {
         const user = {
             username: 'tester',
             token: '1231231214',
             name: 'Teuvo Testaaja'
           }
-          window.localStorage.setItem('loggedBlogUser', JSON.stringify(user))
           app = mount(<App />)
+          app.setState({user: user})
         })
   
       it('all notes are rendered', () => {
@@ -40,5 +39,5 @@ import blogService from './services/blogs'
         blogComponents.debug()
         expect(blogComponents.length).toEqual(blogService.blogs.length)
       })
-    }) */
+    }) 
   })

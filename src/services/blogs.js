@@ -12,10 +12,6 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`
 }
 
-const getToken = () => {
-  return this.token
-}
-
 const create = async (blogObject) => {
   const config = {
     headers: { 'Authorization': token }
