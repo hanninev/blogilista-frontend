@@ -30,25 +30,23 @@ class Blog extends React.Component {
     }
 
     let del = <p></p>
-    if (window.localStorage !== undefined) {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
-    const loggedin = JSON.parse(loggedUserJSON)
-    if(loggedin.username.toString() === blog.user.username.toString()) {
+    if(this.props.user !== undefined) {
+    if(this.props.user.username.toString() === blog.user.username.toString()) {
       del = <button onClick={remove(blog)}>delete</button>
     } 
   }
-    
+
   return (
 
   <div style={blogStyle}>
-        <div style={hideWhenVisible}>
-          <div onClick={this.toggleVisibility} className="blogHidden">
+        <div style={hideWhenVisible} className="blogHidden">
+          <div onClick={this.toggleVisibility} className="titleAndAuthor">
           {blog.title}: {blog.author}
           </div>
         </div>
-        <div style={showWhenVisible} onClick={this.toggleVisibility} className="blogShown">         
+        <div style={showWhenVisible} className="blogShown">         
           <div>   
-            <p> {blog.title} {blog.author} </p>
+            <p onClick={this.toggleVisibility}> {blog.title} {blog.author} </p>
             <p> {blog.url} </p>
             </div><div>
             <p> {blog.likes} likes <button onClick={like(blog)}>like</button></p>

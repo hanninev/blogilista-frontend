@@ -5,7 +5,7 @@ const LoginForm = ({
 login, handleChange, username, password
 }) => {
     return (
-        <div>
+        <div className=".login-form">
         <h2>Kirjaudu</h2>
         <form onSubmit={login}>
           <div>
